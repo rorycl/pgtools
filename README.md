@@ -17,3 +17,8 @@ A Go tool for introspecting the functions in a database, useful for
 creating model interface files, for example for python. The tool can
 also be used for dropping functions in a database.
 
+## go-pooltest
+
+A Go tool for testing postgresql connections, particularly for
+investigating the behaviour of pgbouncer reserve pools and pool limits.
+
