@@ -21,7 +21,7 @@ including in python database model files.
 Run the programme with `-h`:
 
 	Usage:
-	  modelmaker : generate python model entries for plpgsql functions
+	  modelmaker : introspect a postgres database's plpgsql functions
 
 	Application Options:
 	  -u, --user=       database user
