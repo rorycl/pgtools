@@ -148,7 +148,7 @@ func (o *Options) dburl(database string) string {
 	return fmt.Sprintf(tpl, o.User, o.Pass, o.Host, o.Port, database)
 }
 
-var usage = `: generate python model entries for plpgsql functions`
+var usage = `: introspect a postgres database's plpgsql functions`
 
 func main() {
 
