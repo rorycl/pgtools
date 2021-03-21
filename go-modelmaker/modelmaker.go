@@ -1,10 +1,11 @@
 /*
- MModelmaker
+Modelmaker
 
-  Describe postgres function signatures, possibly for use in creating
-  model interface files for other languages, eg. python
+Describe postgres function signatures, possibly for use in creating
+model interface files for other languages, eg. python, or "drop
+function" sql listings.
 
-  Rory Campbell-Lange : 21 March 2021
+Rory Campbell-Lange : 21 March 2021
 */
 
 package main
@@ -26,18 +27,18 @@ import (
 const query = `
 SELECT
     n.nspname as "schema"
-	,p.proname as "name"
-	,pg_catalog.pg_get_function_arguments(p.oid) as "arguments"
-	,pg_catalog.pg_get_function_result(p.oid) as "returns"
+    ,p.proname as "name"
+    ,pg_catalog.pg_get_function_arguments(p.oid) as "arguments"
+    ,pg_catalog.pg_get_function_result(p.oid) as "returns"
 FROM
-	pg_catalog.pg_proc p
-	LEFT JOIN pg_catalog.pg_namespace n ON n.oid = p.pronamespace
-	LEFT JOIN pg_catalog.pg_language l ON l.oid = p.prolang
+    pg_catalog.pg_proc p
+    LEFT JOIN pg_catalog.pg_namespace n ON n.oid = p.pronamespace
+    LEFT JOIN pg_catalog.pg_language l ON l.oid = p.prolang
 WHERE
-	p.proname OPERATOR(pg_catalog.~) 'XXX'
-	AND p.prokind IN ('p', 'f')
-	AND n.nspname NOT IN ('pg_catalog')
-	AND pg_catalog.pg_function_is_visible(p.oid)
+    p.proname OPERATOR(pg_catalog.~) 'XXX'
+    AND p.prokind IN ('p', 'f')
+    AND n.nspname NOT IN ('pg_catalog')
+    AND pg_catalog.pg_function_is_visible(p.oid)
 ORDER BY 1, 2, 4;
 `
 
@@ -48,7 +49,7 @@ type Arg struct {
 	Default string
 }
 
-// NameNoIn removes 'in_' from any field name
+// NameNoIn removes 'in_' prefixes from any arg name
 func (a *Arg) NameNoIn() string {
 	return strings.Replace(a.Name, "in_", "", 1)
 }
