@@ -1,17 +1,17 @@
-# pgtools/pg_json_logger
+# pgtools/modelmaker
 
 A Go tool for creating model files for Postgresql plpgsql functions.
 
 Rory Campbell-Lange  
-version 0.1 : 21 March 2021
+version v0.1-beta : 21 March 2021
 
 ## Introduction
 
-Inspired by the work of a colleague who wrote a python programme for
-automatically creating model interface files, this tool helps introspect
-the functions in a particular database and output these for easy
-inclusion in a model file, for example by running the programme
-via `:r ! modelmaker <args>`.
+Inspired by the work of a colleague who has written a python programme
+for automatically creating model interface files, this tool helps
+introspect the functions in a particular database and output these for
+easy inclusion in a model file, for example by running the programme via
+`:r ! modelmaker <args>` in vim.
 
 The included output templates are examples for creating snippets for
 including in python database model files.
