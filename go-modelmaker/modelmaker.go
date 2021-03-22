@@ -139,7 +139,7 @@ type Options struct {
 	Port       int    `short:"P" long:"port"       description:"server port" default:"5432"`
 	Host       string `short:"H" long:"host"       description:"server host" default:"127.0.0.1"`
 	Searchpath string `short:"s" long:"searchpath" description:"searchpath" required:"true"`
-	Template   string `short:"t" long:"template"   description:"template file" default:"output.tpl"`
+	Template   string `short:"t" long:"template"   description:"template file" default:"templates/python.tpl"`
 	Filter     string `short:"f" long:"filter"     description:"filter for function names (regexes allowed)"`
 }
 
