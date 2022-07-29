@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
-	"os"
 
 	yaml "gopkg.in/yaml.v3"
 )
@@ -30,19 +28,6 @@ func LoadYaml(yamlByte []byte) (Config, error) {
 
 	err = config.check()
 	return config, err
-}
-
-func main() {
-	f, err := ioutil.ReadFile("config.yaml")
-	if err != nil {
-		panic(err)
-	}
-	y, err := LoadYaml(f)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	fmt.Printf("%+v\n", y)
 }
 
 // check checks the validity of the settings file
