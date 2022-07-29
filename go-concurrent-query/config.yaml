@@ -1,0 +1,23 @@
+type1:
+  databases:
+    - db_type1_1
+    - db_type1_2
+    - db_type1_3
+  concurrency: 3
+  iterations: 3
+  queries:
+    - select * from function()
+    - select 1
+    - select pg_sleep(5)
+
+type2:
+  databases: [db_type2_1, db_type2_2, db_type2_3]
+  concurrency: 2
+  iterations: 2
+  queries:
+    - >
+      select * from function()
+    - >
+      select 1
+    - >
+      select pg_sleep(5)
