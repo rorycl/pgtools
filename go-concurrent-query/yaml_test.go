@@ -21,10 +21,6 @@ func TestTomlSettings(t *testing.T) {
 		t.Errorf("Could not parse yaml %v", err)
 	}
 
-	fmt.Printf("%+v\n", y)
-	for k := range y {
-		fmt.Println(k)
-	}
 	if _, ok := y["type1"]; !ok {
 		t.Errorf("no type1 dbquerygroup found")
 	}
