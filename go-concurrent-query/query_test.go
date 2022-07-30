@@ -39,7 +39,7 @@ func TestQuery(t *testing.T) {
 		Iterations: 2,
 		Queries: []string{
 			"select 1",
-			"select * from pg_sleep(1)",
+			"select * from pg_sleep(0.3)",
 			"select * from x",
 		},
 	}
@@ -50,13 +50,13 @@ func TestQuery(t *testing.T) {
 	}
 
 	errChan := make(chan error)
-	done := make(chan struct{})
 
-	go dbq.Query(done, errChan)
+	go dbq.Query(errChan)
 
-	after := time.After(time.Second * 3)
+	after := time.After(time.Second * 1)
 
 	errorCount := 0
+LOOP:
 	for {
 		select {
 		case e := <-errChan:
@@ -64,10 +64,8 @@ func TestQuery(t *testing.T) {
 			errorCount++
 			t.Logf("error %s\n", e)
 		case <-after:
-			fmt.Println("++")
 			t.Logf("planned timeout")
-			done <- struct{}{}
-			break
+			break LOOP
 		}
 	}
 

@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"net"
 
 	flags "github.com/jessevdk/go-flags"
@@ -12,17 +11,11 @@ import (
 type Options struct {
 	User     string `short:"u" long:"user"     description:"database user" required:"true"`
 	Pass     string `short:"p" long:"password" description:"database pass" required:"true"`
-	Config   string `short:"c" long:"config"   description:"database query group yaml file"`
+	Config   string `short:"c" long:"config"   description:"database query group yaml file" required:"true"`
 	Port     int    `short:"P" long:"port"     description:"server port" default:"5432"`
 	Host     string `short:"H" long:"host"     description:"server host" default:"127.0.0.1"`
 	Duration int    `short:"d" long:"duration" description:"limit test duration in seconds" default:"0"`
 	Exit     bool   `short:"e" long:"errexit"  description:"exit on first query err"`
-}
-
-// dburl constructs a database connection url
-func (o *Options) dburl(database string) string {
-	var tpl = "postgres://%s:%s@%s:%v/%s"
-	return fmt.Sprintf(tpl, o.User, o.Pass, o.Host, o.Port, database)
 }
 
 var usage = `

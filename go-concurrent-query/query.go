@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"time"
@@ -17,8 +18,17 @@ type DBQuery struct {
 	Queries    []string
 }
 
+// setDBURL constructs a database connection url
+func (d *DBQuery) setDBURL(user, pass, host, port, database string) {
+	var tpl = "postgres://%s:%s@%s:%v/%s"
+	d.DBURL = fmt.Sprintf(tpl, user, pass, host, port, database)
+}
+
 // checkConnection checks if the required database can be access
 func (d *DBQuery) checkConnection() error {
+	if d.DBURL == "" {
+		return errors.New("the database url is empty")
+	}
 	conn, err := pgx.Connect(context.Background(), d.DBURL)
 	if err != nil {
 		return err
@@ -30,19 +40,12 @@ func (d *DBQuery) checkConnection() error {
 	return nil
 }
 
-// Query queries a database, reporting erros on errorchan, cancelling
-// the function if anything is received on the done channel
-func (d *DBQuery) Query(done <-chan struct{}, errorchan chan<- error) {
-
-	go func() {
-		for {
-			select {
-			case <-done:
-				return
-			}
-		}
-	}()
-
+// Query queries a database, reporting errors on errorchan
+func (d *DBQuery) Query(errorchan chan<- error) {
+	if d.DBURL == "" {
+		errorchan <- fmt.Errorf("db url for %s is empty", d.DBName)
+		return
+	}
 	conn, err := pgx.Connect(context.Background(), d.DBURL)
 	defer conn.Close(context.Background())
 	if err != nil {
