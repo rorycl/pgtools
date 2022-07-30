@@ -30,9 +30,9 @@ func (d *DBQuery) checkConnection() error {
 	return nil
 }
 
-// dbquery queries a database, reporting erros on errorchan, cancelling
+// Query queries a database, reporting erros on errorchan, cancelling
 // the function if anything is received on the done channel
-func (d *DBQuery) query(done <-chan struct{}, errorchan chan<- error) {
+func (d *DBQuery) Query(done <-chan struct{}, errorchan chan<- error) {
 
 	go func() {
 		for {
