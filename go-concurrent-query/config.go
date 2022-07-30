@@ -7,11 +7,11 @@ import (
 )
 
 // Config represents the configurations set out in a yaml file
-type Config map[string]DBQueryGroup
+type Config map[string]DBQueryGroupConfig
 
-// DBQueryGroup sets out the configuration items for each group of
+// DBQueryGroupConfig sets out the configuration items for each group of
 // databases
-type DBQueryGroup struct {
+type DBQueryGroupConfig struct {
 	Databases   []string
 	Concurrency int
 	Iterations  int

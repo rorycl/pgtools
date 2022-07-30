@@ -51,7 +51,7 @@ func TestQuery(t *testing.T) {
 
 	errChan := make(chan error)
 
-	go dbq.Query(errChan)
+	go dbq.Query("test", errChan)
 
 	after := time.After(time.Second * 1)
 
@@ -60,7 +60,6 @@ LOOP:
 	for {
 		select {
 		case e := <-errChan:
-			fmt.Println("--")
 			errorCount++
 			t.Logf("error %s\n", e)
 		case <-after:

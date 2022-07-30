@@ -1,6 +1,6 @@
 module github.com/rorycl/pgtools/concurrent-query
 
-go 1.18
+go 1.17
 
 require (
 	github.com/jackc/pgx/v4 v4.16.1

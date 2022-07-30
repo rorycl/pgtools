@@ -40,36 +40,30 @@ func (d *DBQuery) checkConnection() error {
 	return nil
 }
 
-// Query queries a database, reporting errors on errorchan
-func (d *DBQuery) Query(errorchan chan<- error) {
+// Query queries a database, reporting errors on errorChan
+func (d DBQuery) Query(label string, errorChan chan<- error) {
 	if d.DBURL == "" {
-		errorchan <- fmt.Errorf("db url for %s is empty", d.DBName)
+		errorChan <- fmt.Errorf("db url for %s is empty", d.DBName)
 		return
 	}
 	conn, err := pgx.Connect(context.Background(), d.DBURL)
 	defer conn.Close(context.Background())
 	if err != nil {
-		errorchan <- fmt.Errorf(
-			"error connecting to %s : %w",
-			d.DBName, err,
-		)
-		return
+		log.Fatalf("error connecting to %s : %s", d.DBName, err)
 	}
 	for i := 1; i <= d.Iterations; i++ {
-		log.Printf("db %s starting iteration %d\n", d.DBName, i)
 		for _, q := range d.Queries {
 			t1 := time.Now()
 			_, err = conn.Exec(context.Background(), q)
 			if err != nil {
-				errorchan <- fmt.Errorf(
-					"error connecting to %s : %w",
-					d.DBName, err,
+				errorChan <- fmt.Errorf(
+					"error on %s executing %s: %s", d.DBName, q, err,
 				)
 				continue
 			}
 			t2 := time.Now()
-			log.Printf("db %s runtime %3d for query %s\n",
-				d.DBName, t2.Sub(t1), q,
+			log.Printf("[%s] db %s iteration %d runtime %0.3fs for query %s\n",
+				label, d.DBName, i, float64(t2.Sub(t1))/float64(time.Second), q,
 			)
 		}
 	}

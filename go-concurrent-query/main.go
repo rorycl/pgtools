@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strconv"
 )
 
 func main() {
@@ -32,19 +33,44 @@ func main() {
 		os.Exit(1)
 	}
 
-	// setup dbqueries
-	dbQueries := []DBQuery{}
-	for _, dbGroup := range config {
+	// setup dbquerygroups
+	queryGroups := []*DBQueryGroup{}
+
+	for dbGroupName, dbGroup := range config {
+		dbqs := []DBQuery{}
+
+		// setup each database
 		for _, db := range dbGroup.Databases {
 			dbq := DBQuery{
 				DBName:     db,
-				DBURL:      "something",
 				Iterations: dbGroup.Iterations,
 				Queries:    dbGroup.Queries,
 			}
-			dbQueries = append(dbQueries, dbq)
+			// make connection url
+			dbq.setDBURL(
+				options.User, options.Pass, options.Host, strconv.Itoa(options.Port), db,
+			)
+			dbqs = append(dbqs, dbq)
 		}
+
+		// make the query group and add it to the slice
+		dbqg := NewDBQueryGroup(
+			dbGroupName,
+			dbGroup.Concurrency,
+		)
+		// cannot send slice of interface; add one by one
+		for _, d := range dbqs {
+			dbqg.AddQuerier(d)
+		}
+		queryGroups = append(queryGroups, dbqg)
 	}
 
-	// start processing
+	done := make(chan struct{})
+	// process
+	for _, d := range queryGroups {
+		go d.Process()
+	}
+
+	<-done
+
 }
