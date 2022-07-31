@@ -62,8 +62,8 @@ func (d DBQuery) Query(label string, errorChan chan<- error) {
 				continue
 			}
 			t2 := time.Now()
-			log.Printf("[%s] db %s iteration %d runtime %0.3fs for query %s\n",
-				label, d.DBName, i, float64(t2.Sub(t1))/float64(time.Second), q,
+			log.Printf("[%-20s:%02d] %0.3fs %s\n",
+				label+":"+d.DBName, i, float64(t2.Sub(t1))/float64(time.Second), q,
 			)
 		}
 	}

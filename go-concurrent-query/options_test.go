@@ -22,27 +22,27 @@ func TestParseOpts(t *testing.T) {
 	}{
 		{
 			msg:    "standard simple options",
-			args:   `prog -u user -p pass -c config.yaml -e`,
+			args:   `prog -u user -p pass -c config.yaml`,
 			errors: false,
 		},
 		{
 			msg:    "no user",
-			args:   `prog -p pass -c config.yaml -e`,
+			args:   `prog -p pass -c config.yaml`,
 			errors: true,
 		},
 		{
 			msg:    "no password",
-			args:   `prog -u user -c config.yaml -e`,
+			args:   `prog -u user -c config.yaml`,
 			errors: true,
 		},
 		{
 			msg:    "invalid host",
-			args:   `prog -u user -p pass -H nonsense -c config.yaml -e`,
+			args:   `prog -u user -p pass -H nonsense -c config.yaml`,
 			errors: true,
 		},
 		{
 			msg:    "valid host",
-			args:   `prog -u user -p pass -H 8.8.8.8 -c config.yaml -e`,
+			args:   `prog -u user -p pass -H 8.8.8.8 -c config.yaml`,
 			errors: false,
 		},
 		{

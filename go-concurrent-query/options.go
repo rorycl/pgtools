@@ -15,7 +15,7 @@ type Options struct {
 	Port     int    `short:"P" long:"port"     description:"server port" default:"5432"`
 	Host     string `short:"H" long:"host"     description:"server host" default:"127.0.0.1"`
 	Duration int    `short:"d" long:"duration" description:"limit test duration in seconds" default:"0"`
-	Exit     bool   `short:"e" long:"errexit"  description:"exit on first query err"`
+	// Exit     bool   `short:"e" long:"errexit"  description:"exit on first query err"`
 }
 
 var usage = `

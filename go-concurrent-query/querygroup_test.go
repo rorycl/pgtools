@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 	"time"
 )
@@ -10,7 +9,6 @@ import (
 type QueryMock struct{}
 
 func (q QueryMock) Query(label string, errorChan chan<- error) {
-	fmt.Println(label)
 	return
 }
 
