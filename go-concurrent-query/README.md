@@ -15,21 +15,6 @@ in a cluster.
 
 Programme usage
 
-	Usage:
-	  concurrent-query 
-
-	Run queries concurrently on a set of Postgresql databases.
-
-	Application Options:
-	  -u, --user=     database user
-	  -p, --password= database pass
-	  -c, --config=   database query group yaml file
-	  -P, --port=     server port (default: 5432)
-	  -H, --host=     server host (default: 127.0.0.1)
-	  -d, --duration= limit test duration in seconds (default: 0)
-
-	Help Options:
-	  -h, --help      Show this help message
 
 Yaml configuration
 

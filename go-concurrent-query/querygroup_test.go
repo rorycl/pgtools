@@ -15,7 +15,7 @@ func (q QueryMock) Query(label string, errorChan chan<- error) {
 // should receive an error for a TestQueryGroup with no
 // DBQueries/Querier
 func TestQueryGroup1(t *testing.T) {
-	qg := NewDBQueryGroup("test1", 1)
+	qg := NewDBQueryGroup("test1", 1, false)
 	go qg.Process()
 	counter := 0
 	ta := time.After(time.Millisecond * 1)
@@ -36,7 +36,29 @@ LOOP:
 }
 
 func TestQueryGroup2(t *testing.T) {
-	qg := NewDBQueryGroup("test2", 1)
+	qg := NewDBQueryGroup("test2", 1, false)
+	qg.AddQuerier(QueryMock{})
+	go qg.Process()
+	counter := 0
+	ta := time.After(time.Millisecond * 1)
+LOOP:
+	for {
+		select {
+		case <-qg.errorChan:
+			counter++
+			break LOOP
+		case <-ta:
+			break LOOP
+		}
+	}
+	if counter != 0 {
+		t.Errorf("counter %d should be 0", counter)
+	}
+}
+
+func TestQueryGroupNoCycle(t *testing.T) {
+	qg := NewDBQueryGroup("test2", 1, true)
+	qg.AddQuerier(QueryMock{})
 	qg.AddQuerier(QueryMock{})
 	go qg.Process()
 	counter := 0

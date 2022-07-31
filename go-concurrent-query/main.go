@@ -57,6 +57,7 @@ func main() {
 		dbqg := NewDBQueryGroup(
 			dbGroupName,
 			dbGroup.Concurrency,
+			options.DontCycle,
 		)
 		// cannot send slice of interface; add one by one
 		for _, d := range dbqs {

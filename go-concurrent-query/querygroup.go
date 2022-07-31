@@ -17,13 +17,15 @@ type DBQueryGroup struct {
 	DBQueries   []Querier
 	errorChan   chan error
 	queryChan   chan Querier
+	dontCycle   bool
 }
 
 // NewDBQueryGroup returns a new DBQueryGroup
-func NewDBQueryGroup(name string, concurrency int) *DBQueryGroup {
+func NewDBQueryGroup(name string, concurrency int, dontCycle bool) *DBQueryGroup {
 	dbqg := DBQueryGroup{
 		Name:        name,
 		Concurrency: concurrency,
+		dontCycle:   dontCycle,
 	}
 	dbqg.errorChan = make(chan error)
 	dbqg.queryChan = make(chan Querier)
@@ -58,7 +60,15 @@ func (dbqg *DBQueryGroup) Process() {
 		}(dbqg.errorChan, dbqg.queryChan)
 	}
 
-	// continously produce database queries
+	// either iterate over the dbqueries or continously produce database
+	// queries
+	if dbqg.dontCycle {
+		for _, q := range dbqg.DBQueries {
+			dbqg.queryChan <- q
+		}
+		return
+	}
+
 	for counter := 0; ; counter++ {
 		i := counter % dbqg.Concurrency
 		dbqg.queryChan <- dbqg.DBQueries[i]
