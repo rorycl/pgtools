@@ -45,16 +45,18 @@ func TestParseOpts(t *testing.T) {
 			args:   `prog -u user -p pass -H 8.8.8.8 -c config.yaml`,
 			errors: false,
 		},
-		{
-			msg:    "invalid duration",
-			args:   `prog -u user -p pass -H 8.8.8.8 -c config.yaml -d -1`,
-			errors: true,
-		},
-		{
-			msg:    "valid duration",
-			args:   `prog -u user -p pass -H 8.8.8.8 -c config.yaml -d 3`,
-			errors: false,
-		},
+		/*
+			{
+				msg:    "invalid duration",
+				args:   `prog -u user -p pass -H 8.8.8.8 -c config.yaml -d -1`,
+				errors: true,
+			},
+			{
+				msg:    "valid duration",
+				args:   `prog -u user -p pass -H 8.8.8.8 -c config.yaml -d 3`,
+				errors: false,
+			},
+		*/
 	} {
 
 		os.Args = strings.Fields(test.args)
