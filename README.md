@@ -22,3 +22,8 @@ also be used for dropping functions in a database.
 A Go tool for testing postgresql connections, particularly for
 investigating the behaviour of pgbouncer reserve pools and pool limits.
 
+## go-concurrent-query
+
+A Go tool for making many concurrent queries on one or more databases,
+useful for load testing.
+
