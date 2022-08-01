@@ -66,11 +66,10 @@ func (dbqg *DBQueryGroup) Process() {
 		for _, q := range dbqg.DBQueries {
 			dbqg.queryChan <- q
 		}
-		return
-	}
-
-	for counter := 0; ; counter++ {
-		i := counter % dbqg.Concurrency
-		dbqg.queryChan <- dbqg.DBQueries[i]
+	} else {
+		for counter := 0; ; counter++ {
+			i := counter % dbqg.Concurrency
+			dbqg.queryChan <- dbqg.DBQueries[i]
+		}
 	}
 }

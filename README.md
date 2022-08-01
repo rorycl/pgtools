@@ -1,8 +1,8 @@
 # pgtools
 
-A place to keep tools related to Postgresql
+Tools related to Postgresql
 
-Rory Campbell-Lange : 21 March 2021
+v0.2: 01 August 2022
 
 ## pg-json-logger
 
@@ -25,5 +25,11 @@ investigating the behaviour of pgbouncer reserve pools and pool limits.
 ## go-concurrent-query
 
 A Go tool for making many concurrent queries on one or more databases,
-useful for load testing.
+in one or more sets, useful for load testing.
+
+## Licence
+
+MIT
+
+Rory Campbell-Lange 2022
 
