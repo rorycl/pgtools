@@ -69,7 +69,7 @@ func main() {
 	done := make(chan struct{})
 	// process
 	for _, d := range queryGroups {
-		go d.Process()
+		go d.Process(done)
 	}
 
 	<-done

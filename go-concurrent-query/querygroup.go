@@ -38,7 +38,7 @@ func (dbqg *DBQueryGroup) AddQuerier(q Querier) {
 }
 
 // Process the queries in the group, printing goroutine errors on errorChan
-func (dbqg *DBQueryGroup) Process() {
+func (dbqg *DBQueryGroup) Process(done chan<- struct{}) {
 
 	if len(dbqg.DBQueries) < 1 {
 		dbqg.errorChan <- fmt.Errorf("no queries to run in querygroup %s", dbqg.Name)
@@ -66,6 +66,8 @@ func (dbqg *DBQueryGroup) Process() {
 		for _, q := range dbqg.DBQueries {
 			dbqg.queryChan <- q
 		}
+		log.Println("Done")
+		done <- struct{}{}
 	} else {
 		for counter := 0; ; counter++ {
 			i := counter % dbqg.Concurrency
