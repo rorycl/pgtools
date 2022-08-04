@@ -36,11 +36,6 @@ func (c Config) check() error {
 		if v.Concurrency == 0 {
 			return fmt.Errorf("group %s requires more than 0 concurrency", k)
 		}
-		if v.Concurrency > len(v.Databases) {
-			return fmt.Errorf(
-				"group %s has concurrency %d greater than length of databases %d",
-				k, v.Concurrency, len(v.Databases))
-		}
 		if v.Iterations == 0 {
 			return fmt.Errorf("group %s requires 1 or more iterations", k)
 		}

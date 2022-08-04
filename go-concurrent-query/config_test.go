@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"os"
-	"strings"
 	"testing"
 )
 
@@ -45,35 +43,8 @@ func TestTomlSettings(t *testing.T) {
 	t.Logf("%+v\n", y)
 }
 
-// ErrorConcurrency checks that the concurrency is valid
-func ErrorConcurrency(t *testing.T) {
-
-	inlineYaml := ` 
----
-typeerror:
-  databases:
-    - db_type1_1
-    - db_type1_2
-    - db_type1_3
-  concurrency: 4
-  iterations: 3
-  queries:
-    - select * from function()
-    - select 1
-    - select pg_sleep(5)
-`
-
-	_, err := LoadYaml([]byte(inlineYaml))
-	if err == nil {
-		t.Errorf("ErrorConcurrency should error with concurrency error")
-	}
-	if !strings.Contains(fmt.Sprint(err), "concurrency") {
-		t.Errorf("error message should contain concurrency")
-	}
-}
-
-// ErrorQueries checks that some queries are provided
-func ErrorQueries(t *testing.T) {
+// TestBigConcurrency concurrency more than number of dbs is ok
+func TestBigConcurrency(t *testing.T) {
 
 	inlineYaml := ` 
 ---
@@ -87,10 +58,7 @@ typeerror:
 `
 
 	_, err := LoadYaml([]byte(inlineYaml))
-	if err == nil {
-		t.Errorf("ErrorQueries should error with queries error")
-	}
-	if !strings.Contains(fmt.Sprint(err), "queries") {
-		t.Errorf("error message should contain queries")
+	if err != nil {
+		t.Errorf("Concurrency should be ok")
 	}
 }
