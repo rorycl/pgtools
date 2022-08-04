@@ -20,6 +20,7 @@ type Options struct {
 }
 
 var usage = `
+
 Run queries concurrently on a set of Postgresql databases.`
 
 // ParseOpts returns the filled options or error
