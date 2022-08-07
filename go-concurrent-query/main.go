@@ -7,10 +7,13 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"strconv"
+	"time"
 )
 
 func main() {
@@ -59,6 +62,7 @@ func main() {
 			dbGroup.Concurrency,
 			options.DontCycle,
 		)
+
 		// cannot send slice of interface; add one by one
 		for _, d := range dbqs {
 			dbqg.AddQuerier(d)
@@ -66,12 +70,60 @@ func main() {
 		queryGroups = append(queryGroups, dbqg)
 	}
 
-	done := make(chan struct{})
-	// process
-	for _, d := range queryGroups {
-		go d.Process(done)
+	// create context to allow closing of all goroutines
+	ctx, cancel := context.WithCancel(context.Background())
+	if options.Duration > 0 {
+		ctx, cancel = context.WithDeadline(
+			ctx,
+			time.Now().Add(time.Duration(options.Duration)*time.Second),
+		)
+	}
+	defer cancel()
+
+	// process each queryGroup, using a context to allow cancellation
+	// and a waitgroup to ensure queries are complete
+	doneCount := 0
+	t1 := time.Now()
+	for _, qg := range queryGroups {
+		go func(qgHere *DBQueryGroup) {
+			go qgHere.Process(ctx)
+
+			for {
+				select {
+				case e := <-qgHere.errorChan:
+					log.Println(e)
+					if options.ErrExit {
+						log.Println("exiting on first error")
+						cancel()
+					}
+				case r := <-qgHere.resultChan:
+					log.Println(r)
+				case <-qgHere.done:
+					log.Printf("query group %s done", qgHere.Name)
+					doneCount++
+					if doneCount == len(queryGroups) {
+						cancel()
+					}
+					// ctx done is caught by general select
+				}
+			}
+
+		}(qg)
 	}
 
-	<-done
+LOOP:
+	for {
+		select {
+		case <-ctx.Done():
+			if err := ctx.Err(); err != nil {
+				log.Println(err)
+			}
+			cancel()
+			break LOOP
+		}
+	}
 
+	// finish up
+	t2 := time.Now()
+	log.Printf("Completed in %s\n", t2.Sub(t1))
 }

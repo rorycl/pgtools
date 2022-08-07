@@ -43,8 +43,8 @@ func TestTomlSettings(t *testing.T) {
 	t.Logf("%+v\n", y)
 }
 
-// TestBigConcurrency concurrency more than number of dbs is ok
-func TestBigConcurrency(t *testing.T) {
+// TestNoQueries tests that there is at least one query for the group
+func TestNoQueries(t *testing.T) {
 
 	inlineYaml := ` 
 ---
@@ -58,7 +58,7 @@ typeerror:
 `
 
 	_, err := LoadYaml([]byte(inlineYaml))
-	if err != nil {
-		t.Errorf("Concurrency should be ok")
+	if err == nil {
+		t.Error("yaml should error with no queries")
 	}
 }
