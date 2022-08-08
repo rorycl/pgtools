@@ -37,21 +37,21 @@ Yaml configuration
 
 ```yaml
 label:
-	# list of databases for test
-	databases: [list, of, databases]
-	# number of databases on which to run concurrent queries
-	# needs to be <= len(databases)
-	concurrency: 3
-	# how many times to run the queries on each database until
-	# moving onto the next database
-	iterations: 3
-	queries:
-		- >
-			select * from function1()
-		- >
-			select 1
-		- >
-			select pg_sleep(5)
+    # list of databases for test
+    databases: [list, of, databases]
+    # number of databases on which to run concurrent queries
+    # needs to be <= len(databases)
+    concurrency: 3
+    # how many times to run the queries on each database until
+    # moving onto the next database
+    iterations: 3
+    queries:
+        - >
+            select * from function1()
+        - >
+            select 1
+        - >
+            select pg_sleep(5)
 ```
 
 It is possible to configure more than one set of tests to run
