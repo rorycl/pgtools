@@ -3,7 +3,13 @@ type1:
     - db_type1_1
     - db_type1_2
     - db_type1_3
+  # number of databases on which to run concurrent queries
+  # normally choose concurrency <= len(databases) but more can work
+  # fine too; the number here sets the number of query consumer
+  # goroutines
   concurrency: 3
+  # how many times to run the queries on each database until
+  # moving onto the next database (if appropriate)
   iterations: 3
   queries:
     - select * from function()

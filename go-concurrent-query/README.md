@@ -36,15 +36,22 @@ Programme usage
 Yaml configuration
 
 ```yaml
+# label is the name of the test or querygroup
 label:
+
     # list of databases for test
     databases: [list, of, databases]
+
     # number of databases on which to run concurrent queries
-    # needs to be <= len(databases)
+    # normally choose concurrency <= len(databases) but more can work
+    # fine too; the number here sets the number of query consumer
+    # goroutines
     concurrency: 3
+
     # how many times to run the queries on each database until
-    # moving onto the next database
+    # moving onto the next database (if appropriate)
     iterations: 3
+
     queries:
         - >
             select * from function1()
@@ -55,4 +62,5 @@ label:
 ```
 
 It is possible to configure more than one set of tests to run
-concurrently, each with their own label.
+concurrently, each with their own label. See `config.yaml` for an
+example.
