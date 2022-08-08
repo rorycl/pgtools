@@ -41,7 +41,13 @@ func main() {
 	queryGroups := []*DBQueryGroup{}
 
 	for dbGroupName, dbGroup := range config {
-		dbqs := []DBQuery{}
+
+		// make a query group
+		dbqg := NewDBQueryGroup(
+			dbGroupName,
+			dbGroup.Concurrency,
+			options.DontCycle,
+		)
 
 		// setup each database
 		for _, db := range dbGroup.Databases {
@@ -54,20 +60,10 @@ func main() {
 			dbq.setDBURL(
 				options.User, options.Pass, options.Host, strconv.Itoa(options.Port), db,
 			)
-			dbqs = append(dbqs, dbq)
+			// cannot send slice of interface; add one by one
+			dbqg.AddQuerier(dbq)
 		}
 
-		// make the query group and add it to the slice
-		dbqg := NewDBQueryGroup(
-			dbGroupName,
-			dbGroup.Concurrency,
-			options.DontCycle,
-		)
-
-		// cannot send slice of interface; add one by one
-		for _, d := range dbqs {
-			dbqg.AddQuerier(d)
-		}
 		queryGroups = append(queryGroups, dbqg)
 	}
 
