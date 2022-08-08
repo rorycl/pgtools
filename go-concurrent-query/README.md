@@ -4,7 +4,7 @@ A Go programme for running queries concurrently on a set of Postgresql
 databases.
 
 Rory Campbell-Lange  
-July 2022
+August 2022
 
 ## Introduction
 
@@ -15,21 +15,23 @@ in a cluster.
 
 Programme usage
 
-    Usage:
-      concurrent-query 
+	Usage:
+	  concurrent-query 
 
-    Run queries concurrently on a set of Postgresql databases.
+	Run queries concurrently on a set of Postgresql databases.
 
-    Application Options:
-      -u, --user=      database user
-      -p, --password=  database pass
-      -c, --config=    database query group yaml file
-      -P, --port=      server port (default: 5432)
-      -H, --host=      server host (default: 127.0.0.1)
-          --dontcycle  don't cycle databases, process each only once
+	Application Options:
+	  -u, --user=      database user
+	  -p, --password=  database pass
+	  -c, --config=    database query group yaml file
+	  -P, --port=      server port (default: 5432)
+	  -H, --host=      server host (default: 127.0.0.1)
+	  -d, --duration=  limit test duration in seconds (default: 0)
+		  --dontcycle  don't cycle databases, process each only once
+	  -e, --errexit    exit on first query err
 
-    Help Options:
-      -h, --help       Show this help message
+	Help Options:
+	  -h, --help       Show this help message
 
 Yaml configuration
 
