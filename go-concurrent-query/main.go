@@ -2,7 +2,8 @@
 // databases.
 //
 // Rory Campbell-Lange
-// July 2022
+// August 2022
+// MIT Licence
 
 package main
 
@@ -80,8 +81,8 @@ func main() {
 	}
 	defer cancel()
 
-	// process each queryGroup, using a context to allow cancellation
-	// and a waitgroup to ensure queries are complete
+	// process each queryGroup, using a context to allow cancellation of
+	// associated goroutines and database queries
 	doneCount := 0
 	t1 := time.Now()
 	for _, qg := range queryGroups {
@@ -104,7 +105,8 @@ func main() {
 					if doneCount == len(queryGroups) {
 						cancel()
 					}
-					// ctx done is caught by general select
+					// ctx.Done() is caught by the general querygroup
+					// select below
 				}
 			}
 
@@ -114,6 +116,8 @@ func main() {
 LOOP:
 	for {
 		select {
+		// catch context cancellations due to cancel or timeout events
+		// across querygroups
 		case <-ctx.Done():
 			if err := ctx.Err(); err != nil {
 				log.Println(err)
